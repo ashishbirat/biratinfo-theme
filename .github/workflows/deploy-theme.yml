@@ -2,17 +2,31 @@ name: Deploy Theme
 on:
   push:
     branches:
-      # - master
+      - master
       - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       # - uses: actions/checkout@v4
-      - uses: actions/checkout@main
-
-      - name: Deploy Ghost Theme
-        uses: TryGhost/action-deploy-theme@v1.2.1
-        with:
-          api-url: ${{ secrets.GHOST_ADMIN_API_URL }}
-          api-key: ${{ secrets.GHOST_ADMIN_API_KEY }}
+      # - name: Deploy Ghost Theme
+      #   uses: TryGhost/action-deploy-theme@v1
+      #   with:
+      #     api-url: ${{ secrets.GHOST_ADMIN_API_URL }}
+      #     api-key: ${{ secrets.GHOST_ADMIN_API_KEY }}
+        - name: Checkout code
+          uses: actions/checkout@v2
+  
+        - name: Use Node.js 20
+          uses: actions/setup-node@v3
+          with:
+            node-version: '20'
+  
+        - name: Install dependencies
+          run: npm install
+  
+        - name: Deploy theme
+          uses: TryGhost/action-deploy-theme@v1.2.1
+          with:
+            api-url: ${{ secrets.GHOST_API_URL }}
+            api-key: ${{ secrets.GHOST_ADMIN_API_KEY }}
